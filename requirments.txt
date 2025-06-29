@@ -1,0 +1,12 @@
+streamlit
+opencv-python
+numpy
+torch
+torchvision
+pydub
+librosa
+matplotlib
+pyAudioAnalysis
+speechbrain
+scipy
+weasyprint
