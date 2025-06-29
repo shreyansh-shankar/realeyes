@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>RealEyes - Deepfake Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>👁️ RealEyes</h1>
+    <p>Next-Gen AI-Powered Deepfake Detection</p>
+
+    <form method="POST" enctype="multipart/form-data">
+      <label for="file-upload" class="upload-label">📁 Choose File</label>
+      <input id="file-upload" type="file" name="file" required>
+      <button type="submit">Upload</button>
+    </form>
+
+
+    {% if filename %}
+    <div class="card preview">
+      {% if filename.endswith('.mp4') or filename.endswith('.mov') %}
+      <video controls width="100%">
+        <source src="{{ url_for('uploaded_file', filename=filename) }}" type="video/mp4">
+      </video>
+      {% elif filename.endswith('.mp3') or filename.endswith('.wav') %}
+      <audio controls>
+        <source src="{{ url_for('uploaded_file', filename=filename) }}">
+      </audio>
+      {% endif %}
+    </div>
+    {% endif %}
+
+
+    {% if result %}
+    <div class="card">
+      <h2>🧠 Analysis Summary</h2>
+      <p><strong>Status:</strong> {{ result.status }}</p>
+      <p><strong>Fake Score:</strong> {{ result.fake_score }}</p>
+      <p><strong>Verdict:</strong> {{ result.summary }}</p>
+    </div>
+
+    <div class="card">
+      <h2>📈 Fake Score Timeline</h2>
+      <canvas id="fakeChart"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>🌡️ Emotion Drift</h2>
+      <canvas id="emotionChart"></canvas>
+    </div>
+
+    <script>
+      const fakeCtx = document.getElementById('fakeChart').getContext('2d');
+      new Chart(fakeCtx, {
+        type: 'line',
+        data: {
+          labels: [...Array({{ result.scores_by_time | length }}).keys()],
+      datasets: [{
+        label: 'Fake Score',
+        data: {{ result.scores_by_time | map(attribute = 1) | list }},
+        borderColor: '#FF4E50',
+        fill: false,
+        tension: 0.3
+            }]
+          }
+        });
+
+      const emotionCtx = document.getElementById('emotionChart').getContext('2d');
+      new Chart(emotionCtx, {
+        type: 'bar',
+        data: {
+          labels: {{ result.emotion_drift | map(attribute = 0) | list }},
+        datasets: [{
+          label: 'Emotion Intensity',
+          data: {{ result.emotion_drift | map(attribute = 1) | list }},
+        backgroundColor: '#FFD200'
+            }]
+          }
+        });
+    </script>
+    {% endif %}
+  </div>
+</body>
+
+</html>
