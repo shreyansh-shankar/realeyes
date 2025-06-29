@@ -61,7 +61,7 @@ def analyze_video(file_path):
 
     if not faces:
         return {
-            "status": "error",
+            "status": "Error",
             "summary": "No faces detected in video"
         }
 
@@ -89,7 +89,7 @@ def analyze_video(file_path):
         summary = "Uncertain / Inconclusive"
 
     return {
-        "status": "success",
+        "status": "Success",
         "fake_score": round(avg_score, 3),
         "summary": "Likely Fake" if avg_score > 0.6 else "Likely Real",
         "scores_by_time": list(zip(timestamps, [round(s, 3) for s in fake_scores]))
