@@ -47,11 +47,6 @@ hr {
     border-bottom: 3px solid #58a6ff;
     color: #58a6ff !important;
 }
-video {
-    max-width: 640px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -76,10 +71,10 @@ if uploaded_file:
     if file_path.endswith((".mp4", ".mov")):
         st.markdown("<h3 style='text-align:center;'>🎞️ Video Preview</h3>", unsafe_allow_html=True)
 
-        # Use an empty spacer layout
-        st.markdown("<div style='display: flex; justify-content: center; justify-: center;'>", unsafe_allow_html=True)
-        st.video(file_path)
-        st.markdown("</div>", unsafe_allow_html=True)
+        # Use columns to center video
+        left_col, center_col, right_col = st.columns([1, 2, 1])
+        with center_col:
+            st.video(file_path)
 
     # Analyze based on file type
     if file_path.endswith((".mp4", ".mov")):
@@ -98,7 +93,6 @@ if uploaded_file:
         col1.metric("🧪 Status", result["status"])
         col2.metric("🎯 Fake Score", f"{result['fake_score']:.2f}")
         col3.metric("🔍 Verdict", result["summary"])
-
 
         if result["summary"] == "Likely Fake":
             st.error("🚨 Warning: Deepfake content likely detected!")
