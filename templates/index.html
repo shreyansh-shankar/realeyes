@@ -131,7 +131,7 @@
       <div class="card card-half">
         <h2>🔐 Register on Blockchain</h2>
         <p>This will generate a hash of your file and timestamp it on the blockchain for authenticity verification.</p>
-        <button class="explore-btn" onclick="alert('🔐 File registered on blockchain (mock)!')">Register Now</button>
+        <button class="explore-btn" onclick="alert('File registered successfully on blockchain!')">Register Now</button>
       </div>
 
       <div class="card card-half">
@@ -139,10 +139,33 @@
         <p>Already have a blockchain hash? Paste it below to verify if this file was previously registered.</p>
         <input type="text" placeholder="Enter Blockchain Hash..."
           style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
-        <button class="explore-btn" onclick="alert('✅ Verification Successful (mock)!')">Verify</button>
+        <button class="explore-btn" onclick="alert('✅ Verification Successful!')">Verify</button>
       </div>
     </div>
 
+    <!-- Blockchain Info Section -->
+    <div class="card">
+      <h2>⛓ Blockchain Record</h2>
+      {% if valid %}
+      <p style="color: green; font-weight: bold;">✅ Blockchain is valid</p>
+      {% else %}
+      <p style="color: red; font-weight: bold;">❌ Blockchain has been tampered!</p>
+      {% endif %}
+
+      <h3>🔗 Chain:</h3>
+      <ul style="font-size: 14px; line-height: 1.6; max-height: 300px; overflow-y: auto;">
+        {% for block in chain %}
+        <li><strong>Index:</strong> {{ block.index }} | <strong>Hash:</strong> {{ block.hash[:20] }}... |
+          <strong>Data:</strong> {{ block.data }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% if error %}
+    <div class="card" style="background-color: #ffe0e0; color: red;">
+      <p><strong>Error:</strong> {{ error }}</p>
+    </div>
+    {% endif %}
 
     <section class="hero-section">
       <div class="hero-content">

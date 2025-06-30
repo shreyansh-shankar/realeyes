@@ -612,10 +612,11 @@ canvas {
 }
 
 /* Analysis & Explanation Font Enhancements */
-.analysis-metric p{
+.analysis-metric {
   font-size: 3rem !important;
   margin: 0.6rem 0 !important;
   align-self: center !important;
+  margin-top: 50px;
 }
 
 .ai-explanation p{
